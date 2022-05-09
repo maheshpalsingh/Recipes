@@ -7,7 +7,7 @@ const MealsSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    category: { type: String, required: true, trim: true },
+    category: [{ type: String, required: true, trim: true }],
     complexity: { type: String, required: true, trim: true },
     affordability: {
       type: String,
@@ -26,19 +26,15 @@ const MealsSchema = new mongoose.Schema(
 
     ingredients: [
       {
-        ingredient: {
-          type: String,
-          required: true,
-        },
+        type: String,
+        required: true,
       },
     ],
     steps: [
       {
-        step: {
-          type: String,
-          required: true,
-          trim: true,
-        },
+        type: String,
+        required: true,
+        trim: true,
       },
     ],
     isGlutenFree: {

@@ -70,24 +70,6 @@ userSchema.virtual("meals", {
   foreignField: "owner",
 });
 
-userSchema.virtual("carts", {
-  ref: "Carts",
-  localField: "_id",
-  foreignField: "owner",
-});
-
-userSchema.virtual("orders", {
-  ref: "Orders",
-  localField: "_id",
-  foreignField: "owner",
-});
-
-userSchema.virtual("addresses", {
-  ref: "Address",
-  localField: "_id",
-  foreignField: "owner",
-});
-
 userSchema.methods.toJSON = function () {
   const user = this;
   const newuser = user.toObject();
@@ -107,7 +89,6 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.statics.findbycredentials = async (email, password) => {
-  console.log("4");
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("invalid login");
@@ -116,7 +97,7 @@ userSchema.statics.findbycredentials = async (email, password) => {
   if (!isMatch) {
     throw new Error("invalid login");
   }
-  console.log("5");
+
   return user;
 };
 
