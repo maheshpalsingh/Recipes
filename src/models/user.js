@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    aboutme: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     email: {
       type: String,
       unique: true,
@@ -40,6 +45,10 @@ const userSchema = new mongoose.Schema(
           throw new Error("number should be greater than 10");
         }
       },
+    },
+    image: {
+      type: String,
+      required: true,
     },
     password: {
       required: true,

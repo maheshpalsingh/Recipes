@@ -32,13 +32,13 @@ mealRouters.post(
   async (req, res) => {
     const image = `http://10.0.2.2:3000/profile/${req.file.filename}`;
     const data = req.body;
-
     const meals = new Meals({
       title: data.title,
       category: data.category,
       complexity: data.complexity,
       affordability: data.affordability,
       image,
+      bg: data.bg,
       duration: data.duration,
       ingredients: data.ingredients,
       steps: data.steps,
@@ -60,10 +60,23 @@ mealRouters.post(
 //getallproducts
 mealRouters.get("/meals/all", async (req, res) => {
   try {
-    const meals = await Meals.find().sort({ createdAt: -1 });
+    const meals = await Meals.find();
     res.send(meals);
   } catch (e) {
     res.status(500).send(e);
+  }
+});
+
+//getproductsbycategory
+mealRouters.get("/meals/bycategory/:cat", async (req, res) => {
+  try {
+    const meals = await Meals.find({ category: req.params.cat });
+    if (!meals) {
+      return res.status(404).send("No data");
+    }
+    res.send(meals);
+  } catch (error) {
+    res.status(404).send(error);
   }
 });
 

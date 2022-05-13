@@ -3,6 +3,27 @@ const userRouter = express.Router();
 const auth = require("../middleware/auth");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: "./uploads/profilepic",
+  filename: (req, file, cb) => {
+    return cb(null, `${file.fieldname}_${Date.now()}${file.originalname}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 1000000 },
+  fileFilter: function (req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error("Invalid extensions"));
+    }
+    cb(undefined, true);
+  },
+});
+
 //Login
 userRouter.post("/users/login", async (req, res) => {
   try {
@@ -25,6 +46,7 @@ userRouter.post("/users/logout", auth, async (req, res) => {
       return token.token !== req.token;
     });
     await req.user.save();
+    console.log("Thankyou");
     res.status(200).send("Thankyou");
   } catch (e) {
     res.status(500).send(e);
@@ -43,21 +65,34 @@ userRouter.post("/users/logoutAll", auth, async (req, res) => {
 });
 
 //register
-userRouter.post("/users/register", async (req, res) => {
-  const user = new User(req.body);
-  try {
-    await user.save();
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
-  } catch (e) {
-    res.status(400).send(e);
+userRouter.post(
+  "/users/register",
+  upload.single("profile"),
+  async (req, res) => {
+    const image = `http://10.0.2.2:3000/profile/${req.file.filename}`;
+    const data = req.body;
+    const user = new User({
+      name: data.name,
+      email: data.email,
+      age: data.age,
+      image,
+      contactno: data.contactno,
+      password: data.password,
+      aboutme: data.aboutme,
+    });
+    try {
+      await user.save();
+      const token = await user.generateAuthToken();
+      res.status(201).send({ user, token });
+    } catch (e) {
+      res.status(400).send(e);
+    }
   }
-});
+);
 
 //readmyprofile
 userRouter.get("/users/get/me", auth, async (req, res) => {
   res.send(req.user);
-  console.log(req.user);
 });
 
 //updateme

@@ -18,6 +18,10 @@ const MealsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    bg: {
+      type: String,
+      required: true,
+    },
     duration: {
       type: Number,
       required: true,
@@ -38,22 +42,22 @@ const MealsSchema = new mongoose.Schema(
       },
     ],
     isGlutenFree: {
-      type: Boolean,
+      type: String,
       required: true,
       trim: true,
     },
     isVegan: {
-      type: Boolean,
+      type: String,
       required: true,
       trim: true,
     },
     isVegetarian: {
-      type: Boolean,
+      type: String,
       required: true,
       trim: true,
     },
     isLactoseFree: {
-      type: Boolean,
+      type: String,
       required: true,
       trim: true,
     },
