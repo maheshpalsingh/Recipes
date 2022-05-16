@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     contactno: {
-      required: true,
+      // required: true,
       type: Number,
       validate(value) {
         if (value < 10) {
