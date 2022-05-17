@@ -32,6 +32,8 @@ mealRouters.post(
   async (req, res) => {
     const image = `http://10.0.2.2:3000/profile/${req.file.filename}`;
     const data = req.body;
+    console.log(data);
+
     const meals = new Meals({
       title: data.title,
       category: data.category,
@@ -57,6 +59,21 @@ mealRouters.post(
   }
 );
 
+mealRouters.post("/meals/add1", async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  const meals = new Meals({
+    title: data.title,
+    category: data.category,
+    complexity: data.complexity,
+  });
+  try {
+    await meals.save();
+    res.status(201).send({ meals });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 //getallproducts
 mealRouters.get("/meals/all", async (req, res) => {
   try {
